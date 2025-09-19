@@ -1,0 +1,36 @@
+<%- include('parts/header') %>
+<%- include('parts/navbar') %>
+
+<form action="/" method="GET">
+    <select name="category" class="form-control">
+        <option value="all">All</option>
+        <option value="clothes">Clothes</option>
+        <option value="phones">Phones</option>
+        <option value="computers">Computers</option>
+    </select>
+    <input type="submit" class="btn btn-primary" value="Filter">
+</form>
+
+<div class="container">
+    <div class="row">
+        <% for(let product of products) { %>
+            <div class="col col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="card" style="width: 18rem;">
+                    <img src="<%= product.image%>" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/product/<%= product._id%>"><%= product.name%></a>
+                            <p>Price: <%= product.price%> $</p>
+                        </h5>
+                        <form action="/cart" method="POST">
+                            <input type="number" name="amount" class="form-control">
+                            <input type="submit" value="Add to cart" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('parts/footer') %>

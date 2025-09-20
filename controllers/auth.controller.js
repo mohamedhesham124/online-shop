@@ -1,4 +1,5 @@
 const userModel = require('../models/user.model');
+const validationResult = require('express-validator').validationResult;
 
 exports.getSignup = (req, res, next) => {
     //render ejs
@@ -6,6 +7,8 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postSignup = (req, res, next) => {
+    //return console.log(validationResult(req).array())
+    
     userModel.createNewUser(req.body.username,req.body.email,req.body.password)
     .then(() => {
         res.redirect('/login')
@@ -38,4 +41,5 @@ exports.logout = (req, res, next) => {
     req.session.destroy(() => {
         res.redirect('/login')
     })
+
 };

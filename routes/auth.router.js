@@ -9,13 +9,14 @@ router.get('/signup', authController.getSignup);
 router.post(
     "/signup",
     bodyParser.urlencoded({extended: true}),
-    check("username").not().isEmpty(),
-    check("email").not().isEmpty().isEmail(),
-    check("password").isLength({min: 6, max:30}),
+    check("username").not().isEmpty().withMessage('Usename is required'),
+    check("email").not().isEmpty().withMessage('Email is required')
+    .isEmail().withMessage('It is not form of an email'),
+    check("password").isLength({min: 6, max:30}).withMessage('Invalid length'),
     check("confirmPassword").custom((value, {req}) => {
         if (value === req.body.password) return true;
         else throw 'passwords dont equal';
-    }),
+    }).withMessage('Passwords are not match'),
     authController.postSignup
 );
 
@@ -28,3 +29,4 @@ router.all('/logout', authController.logout);
 
 
 module.exports = router;
+

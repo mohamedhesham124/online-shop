@@ -14,6 +14,11 @@
             <%= a %>
         </p>
     <% } %>
+    <% for(let a of loginErrors) { %>
+        <p class="alert alert-danger">
+            <%= a.msg %>
+        </p>
+    <% } %>
     <div>
         Don't have account ? <a href="/signup">Create an account</a>
     </div>

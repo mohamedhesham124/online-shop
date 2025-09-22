@@ -1,35 +1,61 @@
-const router = require('express').Router();
-const bodyParser = require('body-parser');
-const check = require('express-validator').check;
+const userModel = require('../models/user.model');
+const validationResult = require('express-validator').validationResult;
 
-const authController = require('../controllers/auth.controller');
+exports.getSignup = (req, res, next) => {
+    //render ejs
+    res.render("signup", {
+        valErrors: req.flash('valErrors')
+    })
+};
 
-// signup
-router.get('/signup', authController.getSignup);
-router.post(
-    "/signup",
-    bodyParser.urlencoded({extended: true}),
-    check("username").not().isEmpty().withMessage('Usename is required'),
-    check("email").not().isEmpty().withMessage('Email is required')
-    .isEmail().withMessage('It is not form of an email'),
-    check("password").isLength({min: 3, max:30}).withMessage('Invalid length'),
-    check("confirmPassword").custom((value, {req}) => {
-        if (value === req.body.password) return true;
-        else throw 'passwords dont equal';
-    }).withMessage('Passwords are not match'),
-    authController.postSignup
-);
+exports.postSignup = (req, res, next) => {
+    let errors=validationResult(req)
+    if(errors.isEmpty()) {
+        userModel.createNewUser(req.body.username,req.body.email,req.body.password)
+        .then(() => {
+            res.redirect('/login')
+        }).catch((err) => {
+            console.log(err)
+            res.redirect('/signup')
+        })
+    }
+    else {
+        //console.log(errors.array())
+        req.flash('valErrors',errors.array())
+        res.redirect('/signup')
+    }
+};
 
-//login
-router.get('/login', authController.getLogin);
-router.post('/login',
-    bodyParser.urlencoded({extended : true}),
-    check("email").not().isEmpty().withMessage('Email is required')
-    .isEmail().withMessage('It is not form of an email'),
-    check("password").isLength({min: 3, max:30}).withMessage('Invalid length'),
-    authController.postLogin);
+exports.getLogin = (req, res, next) => {
+    //render ejs
+    res.render("login",{
+        authError: req.flash('authError'),
+        loginErrors: req.flash('loginErrors')
+    })
+};
 
-//logout
-router.all('/logout', authController.logout);
+exports.postLogin = (req, res, next) => {
+    let errors=validationResult(req)
+    if(errors.isEmpty()) {
+        userModel.login(req.body.email,req.body.password)
+        .then((id) => {
+            req.session.userId = id
+            res.redirect('/')
+        }).catch((err) => {
+            //console.log(err)
+            req.flash('authError',err)
+            res.redirect('/login')
+        })
+    }
+    else {
+        console.log(errors.array())
+        req.flash('loginErrors',errors.array())
+        res.redirect('/login')
+    }
+};
 
-module.exports = router;
+exports.logout = (req, res, next) => {
+    req.session.destroy(() => {
+        res.redirect('/login')
+    })
+};

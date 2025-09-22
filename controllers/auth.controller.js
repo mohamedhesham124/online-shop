@@ -1,45 +1,35 @@
-const userModel = require('../models/user.model');
-const validationResult = require('express-validator').validationResult;
+const router = require('express').Router();
+const bodyParser = require('body-parser');
+const check = require('express-validator').check;
 
-exports.getSignup = (req, res, next) => {
-    //render ejs
-    res.render("signup")
-};
+const authController = require('../controllers/auth.controller');
 
-exports.postSignup = (req, res, next) => {
-    //return console.log(validationResult(req).array())
-    
-    userModel.createNewUser(req.body.username,req.body.email,req.body.password)
-    .then(() => {
-        res.redirect('/login')
-    }).catch((err) => {
-        console.log(err)
-        res.redirect('/signup')
-    })
-};
+// signup
+router.get('/signup', authController.getSignup);
+router.post(
+    "/signup",
+    bodyParser.urlencoded({extended: true}),
+    check("username").not().isEmpty().withMessage('Usename is required'),
+    check("email").not().isEmpty().withMessage('Email is required')
+    .isEmail().withMessage('It is not form of an email'),
+    check("password").isLength({min: 3, max:30}).withMessage('Invalid length'),
+    check("confirmPassword").custom((value, {req}) => {
+        if (value === req.body.password) return true;
+        else throw 'passwords dont equal';
+    }).withMessage('Passwords are not match'),
+    authController.postSignup
+);
 
-exports.getLogin = (req, res, next) => {
-    //render ejs
-    res.render("login",{
-        authError: req.flash('authError')[0]
-    })
-};
+//login
+router.get('/login', authController.getLogin);
+router.post('/login',
+    bodyParser.urlencoded({extended : true}),
+    check("email").not().isEmpty().withMessage('Email is required')
+    .isEmail().withMessage('It is not form of an email'),
+    check("password").isLength({min: 3, max:30}).withMessage('Invalid length'),
+    authController.postLogin);
 
-exports.postLogin = (req, res, next) => {
-    userModel.login(req.body.email,req.body.password)
-    .then((id) => {
-        req.session.userId = id
-        res.redirect('/')
-    }).catch((err) => {
-        //console.log(err)
-        req.flash('authError',err)
-        res.redirect('/login')
-    })
-};
+//logout
+router.all('/logout', authController.logout);
 
-exports.logout = (req, res, next) => {
-    req.session.destroy(() => {
-        res.redirect('/login')
-    })
-
-};
+module.exports = router;

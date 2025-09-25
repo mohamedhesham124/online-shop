@@ -33,4 +33,10 @@
     </div>
 </div>
 
+<% if(validationErrors) { %>
+    <div class="alert alert-danger">
+        <%= validationErrors.msg %>
+    </div>
+<% } %>
+
 <%- include('parts/footer') %>

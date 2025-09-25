@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const productsModel = require('../models/product.model');
 
 exports.getHome = (req, res, next) => {
@@ -13,7 +14,9 @@ exports.getHome = (req, res, next) => {
     }
     promiseExcuter.then((products) => {
         res.render('index', {
-            products: products
+            products: products,
+            isUser: req.session.userId,
+            validationErrors: req.flash('validationErrors')[0]
         });
     })
 };

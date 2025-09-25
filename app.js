@@ -8,6 +8,7 @@ const app = express();
 const homeRouter=require('./routes/home.router')
 const productRouter=require('./routes/product.router')
 const authRouter=require('./routes/auth.router')
+const cartRouter=require('./routes/cart.router')
 
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'images')));
@@ -31,6 +32,7 @@ app.set('views', 'views'); // default
 app.use(homeRouter)
 app.use(productRouter)
 app.use(authRouter)
+app.use(cartRouter)
 
 app.listen(3000, () => {
     console.log('server listen on port 3000');

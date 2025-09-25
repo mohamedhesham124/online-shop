@@ -4,7 +4,8 @@ const validationResult = require('express-validator').validationResult;
 exports.getSignup = (req, res, next) => {
     //render ejs
     res.render("signup", {
-        valErrors: req.flash('valErrors')
+        valErrors: req.flash('valErrors'),
+        isUser: req.session.userId
     })
 };
 
@@ -30,7 +31,8 @@ exports.getLogin = (req, res, next) => {
     //render ejs
     res.render("login",{
         authError: req.flash('authError'),
-        loginErrors: req.flash('loginErrors')
+        loginErrors: req.flash('loginErrors'),
+        isUser: req.session.userId
     })
 };
 

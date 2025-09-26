@@ -5,7 +5,8 @@ exports.getCart = (req, res, next) => {
     cartModel.getItemsByUser(req.session.userId).then(items => {
         res.render('cart', {
             items: items,
-            isUser: req.session.userId
+            isUser: req.session.userId,
+            validationErrors: req.flash('validationErrors')[0]
         });
     }).catch(err => console.log(err));
 };

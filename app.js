@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const SessionStore = require('connect-mongodb-session')(session);
-const flash = require('connect-flash')
+const flash = require('connect-flash') //ok
 
 const app = express();
 const homeRouter=require('./routes/home.router')

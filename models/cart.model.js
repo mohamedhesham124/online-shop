@@ -18,12 +18,20 @@ exports.addNewItem = data => {
         mongoose
         .connect(DB_URL)
         .then(() => {
-            let item = new CartItem(data);
-            return item.save();
+            return CartItem.find({productId: data.productId})
         })
-        .then(() => {
+        .then((newData) => {
+            if(newData.length==0) {
+                let item = new CartItem(data);
+                return item.save();
+            }
+            else {
+                return CartItem.updateOne({productId: data.productId}, data);
+            }
+        })
+        .then((items) => {
             mongoose.disconnect();
-            resolve();
+            resolve(items);
         })
         .catch(err => {
             mongoose.disconnect();

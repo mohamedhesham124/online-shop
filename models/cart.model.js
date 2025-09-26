@@ -91,3 +91,21 @@ exports.deleteItem = (id) => {
             });
     });
 };
+
+exports.deleteAllItems = (userId) => {
+    return new Promise((resolve, reject) => {
+        mongoose
+            .connect(DB_URL)
+            .then(() => {
+                return CartItem.deleteMany({userId: userId});
+            })
+            .then(() => {
+                mongoose.disconnect();
+                resolve();
+            })
+            .catch(err => {
+                mongoose.disconnect();
+                reject(err);
+            });
+    });
+};

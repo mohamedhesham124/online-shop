@@ -52,3 +52,10 @@ exports.postDelete = (req, res, next) => {
         .then(() => res.redirect("/cart"))
         .catch(err => console.log(err));
 };
+
+exports.postDeleteAll = (req, res, next) => {
+    cartModel
+        .deleteAllItems(req.session.userId)
+        .then(() => res.redirect("/cart"))
+        .catch(err => console.log(err));
+};

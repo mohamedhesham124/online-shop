@@ -7,6 +7,10 @@ const userSchema = mongoose.Schema({
     name: String,
     email: String,
     password: String,
+    isAdmin : {
+        type: Boolean,
+        default: false
+    }
 });
 
 const User = mongoose.model('user', userSchema);
@@ -60,7 +64,10 @@ exports.login = (email, password) => {
                         reject("password is incorrect");
                     } else {
                         mongoose.disconnect();
-                        resolve(user._id);
+                        resolve({
+                            id: user._id,
+                            isAdmin: user.isAdmin
+                        });
                     }
                 });
             }

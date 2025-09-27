@@ -6,6 +6,7 @@ exports.getVerify = (req, res, next) => {
     const { productName, productId, amount, totalPrice } = req.query;
     res.render("verify", {
         isUser: req.session.userId,
+        isAdmin: req.session.isAdmin,
         productName,
         productId,
         amount,
@@ -38,6 +39,7 @@ exports.getOrder = (req, res, next) => {
         res.render('order', {
             orders: orders,
             isUser: req.session.userId,
+            isAdmin: req.session.isAdmin
         });
     }).catch(err => console.log(err));
 };

@@ -16,6 +16,7 @@ exports.getHome = (req, res, next) => {
         res.render('index', {
             products: products,
             isUser: req.session.userId,
+            isAdmin: req.session.isAdmin,
             validationErrors: req.flash('validationErrors')[0]
         });
     })

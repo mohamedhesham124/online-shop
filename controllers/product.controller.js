@@ -6,7 +6,9 @@ exports.getProduct = (req, res, next) => {
     let id = req.params.id
     productsModel.getProductById(id).then((product) => {
         res.render('product', {
-            product: product
+            product: product,
+            isUser: req.session.userId,
+            isAdmin: req.session.isAdmin
         });
     })
 };

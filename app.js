@@ -10,6 +10,7 @@ const productRouter=require('./routes/product.router')
 const authRouter=require('./routes/auth.router')
 const cartRouter=require('./routes/cart.router')
 const orderRouter=require('./routes/order.router')
+const adminRouter=require('./routes/admin.router')
 
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'images')));
@@ -35,6 +36,7 @@ app.use(productRouter)
 app.use(authRouter)
 app.use(cartRouter)
 app.use(orderRouter)
+app.use(adminRouter)
 
 app.listen(3000, () => {
     console.log('server listen on port 3000');

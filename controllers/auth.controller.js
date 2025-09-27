@@ -5,7 +5,8 @@ exports.getSignup = (req, res, next) => {
     //render ejs
     res.render("signup", {
         valErrors: req.flash('valErrors'),
-        isUser: req.session.userId
+        isUser: false,
+        isAdmin: false       
     })
 };
 
@@ -32,7 +33,8 @@ exports.getLogin = (req, res, next) => {
     res.render("login",{
         authError: req.flash('authError'),
         loginErrors: req.flash('loginErrors'),
-        isUser: req.session.userId
+        isUser: false,
+        isAdmin: false
     })
 };
 
@@ -40,8 +42,9 @@ exports.postLogin = (req, res, next) => {
     let errors=validationResult(req)
     if(errors.isEmpty()) {
         userModel.login(req.body.email,req.body.password)
-        .then((id) => {
-            req.session.userId = id
+        .then((result) => {
+            req.session.userId = result.id
+            req.session.isAdmin = result.isAdmin
             res.redirect('/')
         }).catch((err) => {
             //console.log(err)

@@ -28,13 +28,20 @@
                         <td><%= i+1 %></td>
                         <td><%= items[i].name %></td>
                         <td><%= items[i].price %> $</td>
-                        <form method="POST">
+                        <form>
                             <td><input type="text" name="amount" class="form-control" value="<%= items[i].amount %>"></td>
                             <td><%= items[i].price * items[i].amount %> $</td>
                             <td>
                                 <input type="hidden" name="cartId" value="<%= items[i]._id %>">
-                                <input type="submit" class="btn btn-success" value="Save" formaction="/cart/save">
-                                <input type="submit" class="btn btn-danger" value="Delete" formaction="/cart/delete">
+                                <input type="hidden" name="productName" value="<%= items[i].name %>">
+                                <input type="hidden" name="productId" value="<%= items[i].productId %>">
+                                <input type="hidden" name="totalPrice" value="<%= items[i].price * items[i].amount %>">
+                                <input type="submit" class="btn btn-success" value="Save" 
+                                    formaction="/cart/save" formmethod="POST">
+                                <input type="submit" class="btn btn-success" value="Order" 
+                                    formaction="/verify" formmethod="GET">
+                                <input type="submit" class="btn btn-danger" value="Delete" 
+                                    formaction="/cart/delete" formmethod="POST">
                             </td>
                         </form>
                     </tr>

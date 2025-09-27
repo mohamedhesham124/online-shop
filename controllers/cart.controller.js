@@ -53,6 +53,13 @@ exports.postDelete = (req, res, next) => {
         .catch(err => console.log(err));
 };
 
+exports.postDeleteOrder = (req, res, next) => {
+    cartModel
+        .deleteItemOrder(req.body.productId)
+        .then(() => console.log("ok"))
+        .catch(err => console.log(err));
+};
+
 exports.postDeleteAll = (req, res, next) => {
     cartModel
         .deleteAllItems(req.session.userId)

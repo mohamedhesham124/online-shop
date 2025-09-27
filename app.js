@@ -2,13 +2,14 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const SessionStore = require('connect-mongodb-session')(session);
-const flash = require('connect-flash') //ok
+const flash = require('connect-flash')
 
 const app = express();
 const homeRouter=require('./routes/home.router')
 const productRouter=require('./routes/product.router')
 const authRouter=require('./routes/auth.router')
 const cartRouter=require('./routes/cart.router')
+const orderRouter=require('./routes/order.router')
 
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'images')));
@@ -33,6 +34,7 @@ app.use(homeRouter)
 app.use(productRouter)
 app.use(authRouter)
 app.use(cartRouter)
+app.use(orderRouter)
 
 app.listen(3000, () => {
     console.log('server listen on port 3000');

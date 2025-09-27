@@ -92,6 +92,24 @@ exports.deleteItem = (id) => {
     });
 };
 
+exports.deleteItemOrder = (id) => {
+    return new Promise((resolve, reject) => {
+        mongoose
+            .connect(DB_URL)
+            .then(() => {
+                return CartItem.deleteOne({ productId: id });
+            })
+            .then(items => {
+                mongoose.disconnect();
+                resolve(items);
+            })
+            .catch(err => {
+                mongoose.disconnect();
+                reject(err);
+            });
+    });
+};
+
 exports.deleteAllItems = (userId) => {
     return new Promise((resolve, reject) => {
         mongoose

@@ -11,6 +11,7 @@ exports.getVerify = (req, res, next) => {
         productId,
         amount,
         totalPrice,
+        pageTitle: 'Verifying your order'
     })
 };
 
@@ -30,7 +31,7 @@ exports.postOrder = (req, res, next) => {
         res.redirect('/order');
     })
     .catch(err => {
-        console.log(err);
+        next(err)
     });
 };
 
@@ -39,7 +40,8 @@ exports.getOrder = (req, res, next) => {
         res.render('order', {
             orders: orders,
             isUser: req.session.userId,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
+            pageTitle: 'Order'
         });
-    }).catch(err => console.log(err));
+    }).catch(err => next(err));
 };

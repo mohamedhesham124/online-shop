@@ -6,10 +6,11 @@ exports.getCart = (req, res, next) => {
         res.render('cart', {
             items: items,
             isUser: true,
-            isUser: req.session.isAdmin,
-            validationErrors: req.flash('validationErrors')[0]
+            isAdmin: req.session.isAdmin,
+            validationErrors: req.flash('validationErrors')[0],
+            pageTitle: 'Cart'
         });
-    }).catch(err => console.log(err));
+    }).catch(err => next(err));
 };
 
 exports.postCart = (req, res, next) => {
@@ -24,7 +25,7 @@ exports.postCart = (req, res, next) => {
         }).then(() => {
             res.redirect('/cart');
         }).catch(err => {
-            console.log(err);
+            next(err);
         });
     } else {
         req.flash('validationErrors', validationResult(req).array());
@@ -40,7 +41,7 @@ exports.postSave = (req, res, next) => {
                 timestamp: Date.now()
             })
             .then(() => res.redirect("/cart"))
-            .catch(err => console.log(err));
+            .catch(err => next(err));
     } else {
         req.flash("validationErrors", validationResult(req).array());
         res.redirect("/cart");
@@ -51,19 +52,19 @@ exports.postDelete = (req, res, next) => {
     cartModel
         .deleteItem(req.body.cartId)
         .then(() => res.redirect("/cart"))
-        .catch(err => console.log(err));
+        .catch(err => next(err));
 };
 
 exports.postDeleteOrder = (req, res, next) => {
     cartModel
         .deleteItemOrder(req.body.productId)
         .then(() => console.log("ok"))
-        .catch(err => console.log(err));
+        .catch(err => next(err));
 };
 
 exports.postDeleteAll = (req, res, next) => {
     cartModel
         .deleteAllItems(req.session.userId)
         .then(() => res.redirect("/cart"))
-        .catch(err => console.log(err));
+        .catch(err => next(err));
 };

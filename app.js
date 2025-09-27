@@ -31,6 +31,27 @@ app.use(session({
 app.set('view engine', 'ejs');
 app.set('views', 'views'); // default
 
+//error handling
+app.get("/error", (req, res, next) => {
+    res.status(500)
+    res.render("error.ejs", {
+        isUser: req.session.userId,
+        isAdmin: req.session.isAdmin
+    });
+});
+
+app.get("/not-admin", (req, res, next) => {
+    res.status(403)
+    res.render("not-admin.ejs", {
+        isUser: req.session.userId,
+        isAdmin: req.session.isAdmin
+    });
+});
+
+app.use((error, req, res, next) => {
+    res.redirect("/error");
+});
+
 app.use(homeRouter)
 app.use(productRouter)
 app.use(authRouter)

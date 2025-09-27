@@ -5,7 +5,8 @@ exports.getAdd = (req, res, next) => {
     res.render("add-product", {
         validationErrors: req.flash("validationErrors"),
         isUser: true,
-        isAdmin: true
+        isAdmin: true,
+        pageTitle: 'Add Product'
     });
 };
 
@@ -20,7 +21,7 @@ exports.postAdd = (req, res, next) => {
         }).then(() => {
             res.redirect('/');
         }).catch(err => {
-            console.log(err);
+            next(err);
         });
     } else {
         req.flash('validationErrors', validationResult(req).array());

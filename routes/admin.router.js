@@ -20,6 +20,17 @@ router.post(
             }
         })
     }).single("image"),
+    check("name").not().isEmpty()
+    .withMessage('name is required'),
+    check("price").isInt({min: 1})
+    .withMessage("price must be greater than 0"),
+    check("description").not().isEmpty()
+    .withMessage('description is required'),
+    check("category").not().isEmpty()
+    .withMessage('category is required')
+    .isIn(['phones', 'clothes', 'computers'])
+    .withMessage('Invalid category selected'),
+    check("password").isLength({min: 3, max:30}).withMessage('Invalid length'),
     check('image').custom((value, { req }) => {
         if (req.file) return true;
         else throw 'image is required';

@@ -5,16 +5,35 @@
     <h3>Create Account</h3>
     <form action="/signup" method="POST">
         <input type="text" class="form-control" name="username" placeholder="Username">
+        <% let usernameError = valErrors.find(err => err.path === 'username') %>
+        <% if (usernameError) { %>
+            <p class="alert alert-danger">
+                <%= usernameError.msg %>
+            </p>
+        <% } %>
         <input type="email" class="form-control" name="email" placeholder="E-mail">
+        <% let emailError = valErrors.find(err => err.path === 'email') %>
+        <% if (emailError) { %>
+            <p class="alert alert-danger">
+                <%= emailError.msg %>
+            </p>
+        <% } %>
         <input type="password" class="form-control" name="password" placeholder="Password">
+        <% let passError = valErrors.find(err => err.path === 'password') %>
+        <% if (passError) { %>
+            <p class="alert alert-danger">
+                <%= passError.msg %>
+            </p>
+        <% } %>
         <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password">
+        <% let passError2 = valErrors.find(err => err.path === 'confirmPassword') %>
+        <% if (passError2) { %>
+            <p class="alert alert-danger">
+                <%= passError2.msg %>
+            </p>
+        <% } %>
         <input type="submit" value="Create Account" class="btn btn-primary">
     </form>
-    <% for(let i of valErrors) {%>
-        <p class="alert alert-danger">
-            <%= i.msg %>
-        </p>
-    <% } %>
     <br>
     <div>
         Already have account ? <a href="/login">Login</a>

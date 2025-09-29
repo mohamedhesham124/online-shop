@@ -30,7 +30,6 @@ router.post(
     .withMessage('category is required')
     .isIn(['phones', 'clothes', 'computers'])
     .withMessage('Invalid category selected'),
-    check("password").isLength({min: 3, max:30}).withMessage('Invalid length'),
     check('image').custom((value, { req }) => {
         if (req.file) return true;
         else throw 'image is required';
